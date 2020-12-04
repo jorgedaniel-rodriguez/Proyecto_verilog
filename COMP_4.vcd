@@ -1,0 +1,242 @@
+$date
+	Fri Dec 04 03:41:37 2020
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module Test_COMP_4 $end
+$var wire 1 ! L_fin $end
+$var wire 1 " K_fin $end
+$var reg 1 # X0 $end
+$var reg 1 $ X1 $end
+$var reg 1 % X2 $end
+$var reg 1 & X3 $end
+$var reg 1 ' Y0 $end
+$var reg 1 ( Y1 $end
+$var reg 1 ) Y2 $end
+$var reg 1 * Y3 $end
+$scope module uut $end
+$var wire 4 + X [3:0] $end
+$var wire 4 , Y [3:0] $end
+$var wire 1 - wl2 $end
+$var wire 1 . wl1 $end
+$var wire 1 / wl0 $end
+$var wire 1 0 wk2 $end
+$var wire 1 1 wk1 $end
+$var wire 1 2 wk0 $end
+$var wire 1 ! L_o $end
+$var wire 1 " K_o $end
+$scope module Comp_1 $end
+$var wire 2 3 s [1:0] $end
+$var wire 1 / L $end
+$var wire 1 2 K $end
+$scope module MUX4x1_K $end
+$var wire 4 4 I [3:0] $end
+$var wire 2 5 S [1:0] $end
+$var reg 1 2 T $end
+$upscope $end
+$scope module MUX4x1_L $end
+$var wire 4 6 I [3:0] $end
+$var wire 2 7 S [1:0] $end
+$var reg 1 / T $end
+$upscope $end
+$upscope $end
+$scope module Ext_1 $end
+$var wire 1 8 A $end
+$var wire 1 9 B $end
+$var wire 1 1 K_n $end
+$var wire 1 2 Ki $end
+$var wire 1 . L_n $end
+$var wire 1 / Li $end
+$upscope $end
+$scope module Ext_2 $end
+$var wire 1 : A $end
+$var wire 1 ; B $end
+$var wire 1 0 K_n $end
+$var wire 1 1 Ki $end
+$var wire 1 - L_n $end
+$var wire 1 . Li $end
+$upscope $end
+$scope module Ext_3 $end
+$var wire 1 < A $end
+$var wire 1 = B $end
+$var wire 1 " K_n $end
+$var wire 1 0 Ki $end
+$var wire 1 ! L_n $end
+$var wire 1 - Li $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0=
+0<
+0;
+0:
+09
+08
+b0 7
+b1101 6
+b0 5
+b1011 4
+b0 3
+12
+11
+10
+1/
+1.
+1-
+b0 ,
+b0 +
+0*
+0)
+0(
+0'
+0&
+0%
+0$
+0#
+1"
+1!
+$end
+#15000
+1=
+1<
+b1000 ,
+1'
+b1000 +
+1#
+#30000
+19
+18
+b1010 ,
+1)
+b1010 +
+1%
+#45000
+0"
+00
+01
+1;
+08
+1:
+b1110 ,
+1(
+0%
+b1100 +
+1$
+#60000
+10
+11
+09
+0;
+0:
+0<
+0)
+b1000 ,
+0(
+0$
+b0 +
+0#
+#75000
+1"
+1;
+1:
+1<
+b1100 ,
+1(
+1$
+b1100 +
+1#
+#90000
+01
+02
+0-
+0!
+b10 5
+b10 7
+b1 3
+19
+0;
+0=
+1*
+1)
+0(
+b11 ,
+0'
+#105000
+11
+00
+0"
+1!
+0.
+1-
+12
+0/
+b1 5
+b1 7
+09
+1;
+1=
+b10 3
+18
+0:
+0<
+0*
+0)
+1(
+b1100 ,
+1'
+1&
+1%
+0$
+b11 +
+0#
+#120000
+1!
+1.
+1"
+1-
+1/
+10
+b11 5
+b11 7
+b11 3
+19
+1:
+1<
+1*
+b1111 ,
+1)
+1$
+b1111 +
+1#
+#135000
+02
+01
+00
+0"
+b10 5
+b10 7
+b1 3
+08
+0:
+0<
+0&
+0%
+0$
+b0 +
+0#
+#150000
+1"
+0!
+0=
+1<
+b111 ,
+0'
+b1000 +
+1#
