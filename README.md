@@ -195,7 +195,7 @@ En dicha grafica se observa que los datos obtenidos cumplen con valores especifi
 
 ## Problema 2
 
-# Diagrama ASM
+### Diagrama ASM
 
 ![asm](https://github.com/jorgedaniel-rodriguez/Proyecto_verilog/blob/main/asm.jpg)
 
@@ -275,6 +275,40 @@ assign C3 = (EstPres == d | EstPres == f | EstPres == g |  !PA & PMB & EstPres =
 
 endmodule
 ```
+### Escogencia de los vectores de prueba
+  La razon principal para escoger 28 estados de prueba es la intension de probar la activacion retardada de los compresores cuando es el tercer compresor en activarse simultaneamente. dentro del codigo se especifica de donde viene a donde van los estados y los bucles que se crean para pasar tres veces por el estado g desde diferentes lineas de activacion de los compresores.
+  ```systemverilog
+  	testvectors[0] = 3'b000; //PA=0,PB=0,PMB=0 (Se queda en el estado a)
+  	testvectors[1] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado b)
+  	testvectors[2] = 3'b000; //PA=0,PB=0,PMB=0 (Se queda en el estado b)
+  	testvectors[3] = 3'b001; //PA=0,PB=0,PMB=1 (Se pasa al  estado g)
+  	testvectors[4] = 3'b000; //PA=0,PB=0,PMB=0 (Se queda en el estado g)
+        testvectors[5] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al estado a)
+        testvectors[6] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado b)
+        testvectors[7] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al  estado c)
+        testvectors[8] = 3'b000; //PA=0,PB=0,PMB=0 (Se queda en el estado c)
+        testvectors[9] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado d)
+        testvectors[10] = 3'b000; //PA=0,PB=0,PMB=0 (Se queda en el estado d)
+        testvectors[11] = 3'b001; //PA=0,PB=0,PMB=1 (Se pasa al  estado g)
+        testvectors[12] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al  estado a)
+        testvectors[13] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado b)
+        testvectors[14] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al  estado c)
+        testvectors[15] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado d)
+        testvectors[16] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al  estado e)
+        testvectors[17] = 3'b000; //PA=0,PB=0,PMB=0 (Se queda en el estado e)
+        testvectors[18] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado f)
+        testvectors[19] = 3'b000; //PA=0,PB=0,PMB=0 (Se queda en el estado f)
+        testvectors[20] = 3'b001; //PA=0,PB=0,PMB=1 (Se pasa al  estado g)
+        testvectors[21] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al  estado a)
+        testvectors[22] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado b)
+        testvectors[23] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al  estado c)
+        testvectors[24] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado d)
+        testvectors[25] = 3'b100; //PA=1,PB=0,PMB=0 (Se pasa al  estado e)
+        testvectors[26] = 3'b010; //PA=0,PB=1,PMB=0 (Se pasa al  estado f)
+        testvectors[27] = 3'b100; //PA=0,PB=0,PMB=0 (Se pasa al  estado a)
+```
+
+
 
 El codigo anterior corresponde a una maquina de estado sincronica de alternador de compresores, la logica de salidas corresponde a los puntos donde las salidas fueron activadas segun el estado presente en que se encuentran excepto las condicionales que existen antes de llegar al estado g dado que toda salida condicional presenta un retraso en su inicio, por lo demas ya fue explicado en detalle con anterioridad.
 
