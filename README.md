@@ -189,13 +189,96 @@ como se puede comprobar en las salidas del sistema en la proxima imagen.
 ![señal](https://github.com/jorgedaniel-rodriguez/Proyecto_verilog/blob/main/señales.png)
 
 
-En dicha grafica se observa que los datos obtenidos cumplen con las solicitudes de la administracion, dado que lo que se solicitó fue que 
-el servidor no estuviera por mas del 10% sin usuarios, con la posible intencion de aprovechar al maximo los recuersos del servidor sin llegar a un 
-sobrecargo de trabajo.
+En dicha grafica se observa que los datos obtenidos cumplen con valores especificos de cada evento dado que cuando inicia con dos vectores vacios el resultado es K=L=1, en los dos siguientes eventos ambos vectores son iguales y se vuelve a cumplir la condicion, luego la palabra B es mayor que A y el resultado es K=0, L=1, para el evento 7 se cumple lo contrario y el sistema no reporta diferencias de ningun tipo con la condicion inicial de comparacion por tanto la red iterativa funciona perfectamente. 
 
-![90](https://github.com/jorgedaniel-rodriguez/Tema5/blob/main/ecuacion.png)
+![bloques](https://github.com/jorgedaniel-rodriguez/Proyecto_verilog/blob/main/diagramabloques.jpg)
 
-Para cumplir con dicha solicitud y dado que el ingreso de clientes al servidor es de aproximadamente 2 usuarios, se utilizo la ecuacion anterior para encontrar el 
-parametro del servicio, siendo este de 2.222222 aproximadamente al esperarse que la probabilidad de que 1 o más usuarios en el servicio no disminuya del 90%; como se
-puede observar los parametros escogidos cumplen con lo esperado y se concluye que es la cantidad de usuarios que satisfacen el sistema.
+## Problema 2
+
+# Diagrama ASM
+
+![asm](https://github.com/jorgedaniel-rodriguez/Proyecto_verilog/blob/main/asm.jpg)
+
+
+Para la realizacion de esta parte es necesario utilizar siete estados para poder lograr el objetivo de crear un sistema de presion con alternador de bombas, se colocara una tabla adjunta para exponer los estados y su descripcion.
+
+|      Estado     |    ABC   |                      Descripcion                   |
+|-----------------|----------|----------------------------------------------------|
+|      **a**      |   *100*  |    Presión Alta C1,C2,C3 Apagados sigue C1,C2      |
+|      **b**      |   *001*  |   	Presión Baja C1,C2 encendidos		  |
+|      **c**      |   *101*  |		  Presión Alta sigue C1,C3                |
+|      **d**      |   *110*  | 		Presión Baja C1,C3 encendidos 		  |
+|      **e**      |   *010*  |            Presión Alta sigue C2,C3                |	
+|      **f**      |   *011*  |		Presión baja C2,C3 Encendidos	          |
+|      **g**      |   *111*  |   	Presión Muy Alta C1,C2,C3 Encendidos	  | 
+
+
+
+<div class=text-justify>
+El diagrama ASM iniciando en el estado pasaria al estado b siempre y cuando exista presion baja, en ese momento se encienden dos compresores C1 y C2 si durante la carga de presion, ambos tanques no son suficientes para restablecer la presion se activa la alerta de presion muy baja provocando que se active el compresor C3 posicionandose en el estado g hasta que se logre alcanzar la presion alta posterior a eso se reinicia los contadores de los compresores, hace el recorrido anterior con la diferencia de que no se activa el sensor de PMB y se estabiliza en el estado c hasta que la presion baje a PB luego procede a llenar el tanque con los compresores alternados C1 C3 si se estabiliza procede al estado d, en caso contrario el sensor PMB se activo y nuevamente se activa el compresor faltante C2 con las mismas condiciones caracteristicas del estado g, nuevamente se realiza el recorrido anterior y hasta llegar a estabilizarse en el e, en caso de existir presion baja se traslada al estado f activando los compresores C2 y C3 con las condiciones de que si el sensor PMB se activa el proximo estado sera G, en caso contrario y se alcance PA, se reinicia al estado a.
+</div>
+
+```systemverilog
+// Maquina alternadora de compresores
+
+module AltCompr( input Clk, Reset,
+				 input PA,PB,PMB,
+				 output C1,C2,C3);
+reg[2:0] EstPres, ProxEstado;
+
+//Asignación de Estado
+
+parameter a = 3'b100;   //Presión Alta C1,C2,C3 Apagados sigue C1,C2
+parameter b = 3'b001;   //Presión Baja C1,C2 encendidos
+parameter c = 3'b101;   //Presión Alta sigue C1,C3
+parameter d = 3'b110;   //Presión Baja C1,C3 encendidos
+parameter e = 3'b010;   //Presión Alta sigue C2,C3
+parameter f = 3'b011;   //Presión baja C2,c3 Encendidos
+parameter g = 3'b111;   //Presión Muy Alta C1,C2,C3 Encendidos
+
+//Memoria de Estados
+always @(posedge Clk, posedge Reset)
+    if (Reset) EstPres <= a;
+        else EstPres <= ProxEstado;
+
+always @ (*)
+    case (EstPres)
+    a	:	if(PB)	ProxEstado = b; //si el estado presente es a y PB esta on proximo estado sera b caso contrario a
+                else ProxEstado = a;
+
+    b   :   if(PA)   ProxEstado = c;
+                else if(PMB) ProxEstado = g; //si el estado presente es b, PA esta on proximo estado es c y ademas si PMB esta on el 
+                                            //proximo estado sera g caso contrario b
+
+                        else ProxEstado = b;
+    c   :   if(PB)   ProxEstado  = d;       //si el estado presente es c y PB on entonces el proximo estado  es d
+                else ProxEstado = c;
+    d   :     if(PA)   ProxEstado = e;
+                else if(PMB) ProxEstado = g;
+                        else ProxEstado = d;
+    e   :   if(PB)   ProxEstado  = f;
+                else ProxEstado = e;
+    f   :   if(PA)   ProxEstado = a;
+                else if(PMB) ProxEstado = g;
+                        else ProxEstado = f;
+    g   :   if(PA)  ProxEstado  = a;
+                else    ProxEstado = g;
+    endcase
+
+//Lógica de calculo de Salida
+
+assign C1 = (EstPres == b | EstPres == d | EstPres == g | !PA & PMB & EstPres == f); 
+
+assign C2 = (EstPres == b | EstPres == f | EstPres == g |  !PA & PMB & EstPres == d);
+
+assign C3 = (EstPres == d | EstPres == f | EstPres == g |  !PA & PMB & EstPres == b);
+
+endmodule
+```
+
+El codigo anterior corresponde a una maquina de estado sincronica de alternador de compresores, la logica de salidas corresponde a los puntos donde las salidas fueron activadas segun el estado presente en que se encuentran excepto las condicionales que existen antes de llegar al estado g dado que toda salida condicional presenta un retraso en su inicio, por lo demas ya fue explicado en detalle con anterioridad.
+
+
+
+
 
